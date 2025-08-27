@@ -41,14 +41,8 @@
   </div>
 
   <!-- 通知元件 -->
-  <div v-if="showNotification" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
-    <div class="toast show align-items-center text-white bg-success border-0">
-      <div class="d-flex">
-        <div class="toast-body">{{ notificationClass }}</div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
-      </div>
-    </div>
-  </div>
+ <NotificationView />
+
   <!-- </div> -->
 </template>
 
@@ -67,6 +61,7 @@ body {
 import { ref,provide } from 'vue';
 // import { useRouter } from 'vue-router';
 // import axios from 'axios';
+import NotificationView from '../components/NotificationView.vue';
 
 // const router = useRouter();
 // 商品資料
@@ -123,7 +118,10 @@ const carts=ref([
 ]);
 
 const showNotification = ref(false);
-const notificationClass = ref('');
+const notification = ref('');
+
+provide('showNotification', showNotification);
+provide('notification', notification);
 
 const addCart = (product) => {
   // 檢查商品是否已在購物車中
@@ -144,13 +142,13 @@ const addCart = (product) => {
   console.log(carts.value);
   
   // 顯示通知訊息
-  notificationClass.value=`${product.title} 已加入購物車`;
+  notification.value=`${product.title} 已加入購物車`;
 
 
   showNotification.value = true;
   setTimeout(() => {
     showNotification.value = false;
-    notificationClass.value.pop();
+    notification.value='';
   }, 2000); // 通知顯示2秒後自動隱藏
 };
 
