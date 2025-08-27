@@ -4,12 +4,12 @@
     <ProductView :products="products" @add-cart="addCart" />
 
     <!-- 購物車區 -->
-    <CartView :carts="carts" />
+    <CartView :carts="carts" @remove-cart="removeCart" />
 
   </div>
 
   <!-- 通知元件 -->
- <NotificationView />
+  <NotificationView />
 
 </template>
 
@@ -21,11 +21,11 @@ body {
 .card-img-top {
   height: 150px;
   object-fit: cover;
-} 
+}
 </style>
 
 <script setup>
-import { ref,provide } from 'vue';
+import { ref, provide } from 'vue';
 // import { useRouter } from 'vue-router';
 // import axios from 'axios';
 import NotificationView from '../components/NotificationView.vue';
@@ -77,7 +77,7 @@ const products = ref([
   },
 ])
 
-const carts=ref([
+const carts = ref([
   {
     id: 1,
     title: '時尚藍牙耳機',
@@ -108,17 +108,26 @@ const addCart = (product) => {
     });
   }
 
+
   console.log(carts.value);
-  
+
   // 顯示通知訊息
-  notification.value=`${product.title} 已加入購物車`;
+  notification.value = `${product.title} 已加入購物車`;
 
 
   showNotification.value = true;
   setTimeout(() => {
     showNotification.value = false;
-    notification.value='';
+    notification.value = '';
   }, 2000); // 通知顯示2秒後自動隱藏
+};
+
+const removeCart = (cart) => {
+  console.log("父層removeCart:", cart);
+  const index = carts.value.findIndex(item => item.id === cart.id);
+  if (index !== -1) {
+    carts.value.splice(index, 1);
+  }
 };
 
 </script>
