@@ -114,7 +114,6 @@ const addCart = (product) => {
   // 顯示通知訊息
   notification.value = `${product.title} 已加入購物車`;
 
-
   showNotification.value = true;
   setTimeout(() => {
     showNotification.value = false;
