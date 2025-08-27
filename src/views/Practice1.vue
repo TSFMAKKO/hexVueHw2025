@@ -1,49 +1,16 @@
 <template>
-  <!-- <div id="app" class="container py-4"> -->
   <div class="row">
     <!-- 商品列表區 -->
-    <div class="col-md-8">
-      <h2 class="mb-3">商品列表</h2>
-      <div class="row">
-        <div class="col-md-4 mb-4" v-for="p in products" :key="p.id">
-          <div class="card h-100">
-            <img
-              :src="p.imgURL"
-              :alt="p.title"
-              class="card-img-top">
-            <div class="card-body">
-              <h5 class="card-title">{{ p.title }}</h5>
-              <p class="card-text">{{ p.content }}</p>
-              <p class="fw-bold text-primary">{{ p.price }}</p>
-              <button class="btn btn-success w-100" @click="addCart(p)"> 加入購物車 </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ProductView :products="products" @add-cart="addCart" />
 
     <!-- 購物車區 -->
-    <div class="col-md-4">
-      <h2 class="mb-3">購物車</h2>
-      <ul class="list-group mb-3">
-        <li v-for="c in carts" :key="c.id" class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="my-0">{{ c.title }}</h6>
-            <small class="text-muted">{{ c.price }}</small>
-          </div>
-          <div>
-            <span class="text-muted">{{ c.quantity }}</span>
-            <button class="btn btn-sm btn-outline-danger ms-2"> 移除 </button>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <CartView :carts="carts" @remove-cart="removeCart" />
+
   </div>
 
   <!-- 通知元件 -->
- <NotificationView />
+  <NotificationView />
 
-  <!-- </div> -->
 </template>
 
 <style scoped>
@@ -54,14 +21,16 @@ body {
 .card-img-top {
   height: 150px;
   object-fit: cover;
-} 
+}
 </style>
 
 <script setup>
-import { ref,provide } from 'vue';
+import { ref, provide } from 'vue';
 // import { useRouter } from 'vue-router';
 // import axios from 'axios';
 import NotificationView from '../components/NotificationView.vue';
+import CartView from '../components/CartView.vue';
+import ProductView from '../components/ProductView.vue';
 
 // const router = useRouter();
 // 商品資料
@@ -108,7 +77,7 @@ const products = ref([
   },
 ])
 
-const carts=ref([
+const carts = ref([
   {
     id: 1,
     title: '時尚藍牙耳機',
@@ -139,17 +108,26 @@ const addCart = (product) => {
     });
   }
 
+
   console.log(carts.value);
-  
+
   // 顯示通知訊息
-  notification.value=`${product.title} 已加入購物車`;
+  notification.value = `${product.title} 已加入購物車`;
 
 
   showNotification.value = true;
   setTimeout(() => {
     showNotification.value = false;
-    notification.value='';
+    notification.value = '';
   }, 2000); // 通知顯示2秒後自動隱藏
+};
+
+const removeCart = (cart) => {
+  console.log("父層removeCart:", cart);
+  const index = carts.value.findIndex(item => item.id === cart.id);
+  if (index !== -1) {
+    carts.value.splice(index, 1);
+  }
 };
 
 </script>
