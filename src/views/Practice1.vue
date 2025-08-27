@@ -26,13 +26,13 @@
     <div class="col-md-4">
       <h2 class="mb-3">購物車</h2>
       <ul class="list-group mb-3">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
+        <li v-for="c in carts" :key="c.id" class="list-group-item d-flex justify-content-between align-items-center">
           <div>
-            <h6 class="my-0">時尚藍牙耳機</h6>
-            <small class="text-muted">數量：1</small>
+            <h6 class="my-0">{{ c.title }}</h6>
+            <small class="text-muted">{{ c.price }}</small>
           </div>
           <div>
-            <span class="text-muted">$7990</span>
+            <span class="text-muted">{{ c.quantity }}</span>
             <button class="btn btn-sm btn-outline-danger ms-2"> 移除 </button>
           </div>
         </li>
@@ -41,10 +41,10 @@
   </div>
 
   <!-- 通知元件 -->
-  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+  <div v-if="showNotification" :class="notificationClass" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
     <div class="toast show align-items-center text-white bg-success border-0">
       <div class="d-flex">
-        <div class="toast-body">這是通知訊息</div>
+        <div class="toast-body">{{ notificationClass }}</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
       </div>
     </div>
@@ -113,6 +113,17 @@ const products = ref([
   },
 ])
 
+const carts=ref([
+  {
+    id: 1,
+    title: '時尚藍牙耳機',
+    price: 7990,
+    quantity: 1,
+  },
+]);
+
+const showNotification = ref(true);
+const notificationClass = ref('這是通知訊息');
 
 
 </script>
