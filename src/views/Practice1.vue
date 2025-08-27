@@ -15,7 +15,7 @@
               <h5 class="card-title">{{ p.title }}</h5>
               <p class="card-text">{{ p.content }}</p>
               <p class="fw-bold text-primary">{{ p.price }}</p>
-              <button class="btn btn-success w-100"> 加入購物車 </button>
+              <button class="btn btn-success w-100" @click="addCart(p)"> 加入購物車 </button>
             </div>
           </div>
         </div>
@@ -41,10 +41,10 @@
   </div>
 
   <!-- 通知元件 -->
-  <div v-if="showNotification" :class="notificationClass" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+  <div v-if="showNotification" class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
     <div class="toast show align-items-center text-white bg-success border-0">
-      <div class="d-flex">
-        <div class="toast-body">{{ notificationClass }}</div>
+      <div class="d-flex" v-for="n in notificationClass">
+        <div class="toast-body">{{ n }}</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
       </div>
     </div>
@@ -57,10 +57,10 @@ body {
   background: #f2f2f2f2;
 }
 
-/* .card-img-top {
+.card-img-top {
   height: 150px;
   object-fit: cover;
-}  */
+} 
 </style>
 
 <script setup>
@@ -123,7 +123,35 @@ const carts=ref([
 ]);
 
 const showNotification = ref(true);
-const notificationClass = ref('這是通知訊息');
+const notificationClass = ref(['這是通知訊息1', '這是通知訊息2']);
 
+const addCart = (product) => {
+  // 檢查商品是否已在購物車中
+  const existingItem = carts.value.find(item => item.id === product.id);
+  if (existingItem) {
+    // 如果已存在，增加數量
+    existingItem.quantity += 1;
+  } else {
+    // 如果不存在，新增商品到購物車
+    carts.value.push({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      quantity: 1,
+    });
+  }
+
+  console.log(carts.value);
+  
+  // 顯示通知訊息
+  notificationClass.value.psuh(`${product.title} 已加入購物車`);
+
+
+  showNotification.value = true;
+  setTimeout(() => {
+    showNotification.value = false;
+    notificationClass.value.pop();
+  }, 2000); // 通知顯示2秒後自動隱藏
+};
 
 </script>
