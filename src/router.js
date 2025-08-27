@@ -34,7 +34,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory("hexVueHw2025"),
   routes,
 });
 
