@@ -18,8 +18,6 @@
 </template>
 
 <script setup>
-// import { log } from 'node:console';
-import { defineProps } from 'vue';
 const props = defineProps({
     carts: {
         type: Array,
@@ -31,9 +29,7 @@ const emit = defineEmits(['remove-cart']);
 
 
 const removeCart = (cart) => {
-    // log(cart);
     console.log("子層removeCart:",cart);
-    
     emit('remove-cart', cart);
 };
 

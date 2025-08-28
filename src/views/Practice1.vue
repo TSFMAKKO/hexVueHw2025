@@ -26,14 +26,11 @@ body {
 
 <script setup>
 import { ref, provide } from 'vue';
-// import { useRouter } from 'vue-router';
-// import axios from 'axios';
 import NotificationView from '../components/NotificationView.vue';
 import CartView from '../components/CartView.vue';
 import ProductView from '../components/ProductView.vue';
 
-// const router = useRouter();
-// 商品資料
+
 const products = ref([
   {
     id: 1,
@@ -79,11 +76,14 @@ const products = ref([
 
 const carts = ref([
   {
-    id: 1,
-    title: '時尚藍牙耳機',
+    id: 3,
+    imgURL:
+      'https://images.unsplash.com/photo-1636099184052-ada1f331132c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: '時尚藍芽耳機',
+    content: '舒適配戴，支援降噪技術',
     price: 7990,
-    quantity: 1,
-  },
+    quantity: 1
+  }
 ]);
 
 const showNotification = ref(false);
