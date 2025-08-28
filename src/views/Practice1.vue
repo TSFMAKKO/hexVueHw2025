@@ -26,14 +26,11 @@ body {
 
 <script setup>
 import { ref, provide } from 'vue';
-// import { useRouter } from 'vue-router';
-// import axios from 'axios';
 import NotificationView from '../components/NotificationView.vue';
 import CartView from '../components/CartView.vue';
 import ProductView from '../components/ProductView.vue';
 
-// const router = useRouter();
-// 商品資料
+
 const products = ref([
   {
     id: 1,
@@ -79,18 +76,33 @@ const products = ref([
 
 const carts = ref([
   {
-    id: 1,
-    title: '時尚藍牙耳機',
+    id: 3,
+    imgURL:
+      'https://images.unsplash.com/photo-1636099184052-ada1f331132c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: '時尚藍芽耳機',
+    content: '舒適配戴，支援降噪技術',
     price: 7990,
-    quantity: 1,
-  },
+    quantity: 1
+  }
 ]);
 
-const showNotification = ref(false);
-const notification = ref('');
+const showNotify = ref(false);
+const notifyMsg = ref('');
 
-provide('showNotification', showNotification);
-provide('notification', notification);
+provide('showNotify', showNotify);
+provide('notifyMsg', notifyMsg);
+
+let sid
+// 封裝通知顯示為共用函數
+const triggerNotification = (msg, duration = 5000) => {
+  notifyMsg.value = msg;
+  showNotify.value = true;
+  if (sid) clearTimeout(sid);
+  sid = setTimeout(() => {
+    showNotify.value = false;
+    notifyMsg.value = '';
+  }, duration);
+};
 
 const addCart = (product) => {
   // 檢查商品是否已在購物車中
@@ -108,17 +120,10 @@ const addCart = (product) => {
     });
   }
 
-
   console.log(carts.value);
 
-  // 顯示通知訊息
-  notification.value = `${product.title} 已加入購物車`;
-
-  showNotification.value = true;
-  setTimeout(() => {
-    showNotification.value = false;
-    notification.value = '';
-  }, 2000); // 通知顯示2秒後自動隱藏
+  // 顯示通知訊息（共用函數）
+  triggerNotification(`${product.title} 已加入購物車`);
 };
 
 const removeCart = (cart) => {
@@ -127,6 +132,8 @@ const removeCart = (cart) => {
   if (index !== -1) {
     carts.value.splice(index, 1);
   }
+
+  triggerNotification(`${cart.title} 已從購物車移除`);
 };
 
 </script>
