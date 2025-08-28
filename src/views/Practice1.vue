@@ -92,11 +92,13 @@ const notificationMessage = ref('');
 provide('isNotificationVisible', isNotificationVisible);
 provide('notificationMessage', notificationMessage);
 
+let sid
 // 封裝通知顯示為共用函數
 const triggerNotification = (message, duration = 5000) => {
   notificationMessage.value = message;
   isNotificationVisible.value = true;
-  setTimeout(() => {
+  if (sid) clearTimeout(sid);
+  sid = setTimeout(() => {
     isNotificationVisible.value = false;
     notificationMessage.value = '';
   }, duration);
