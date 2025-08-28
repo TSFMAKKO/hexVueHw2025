@@ -86,21 +86,21 @@ const carts = ref([
   }
 ]);
 
-const isNotificationVisible = ref(false);
-const notificationMessage = ref('');
+const showNotify = ref(false);
+const notifyMsg = ref('');
 
-provide('isNotificationVisible', isNotificationVisible);
-provide('notificationMessage', notificationMessage);
+provide('showNotify', showNotify);
+provide('notifyMsg', notifyMsg);
 
 let sid
 // 封裝通知顯示為共用函數
-const triggerNotification = (message, duration = 5000) => {
-  notificationMessage.value = message;
-  isNotificationVisible.value = true;
+const triggerNotification = (msg, duration = 5000) => {
+  notifyMsg.value = msg;
+  showNotify.value = true;
   if (sid) clearTimeout(sid);
   sid = setTimeout(() => {
-    isNotificationVisible.value = false;
-    notificationMessage.value = '';
+    showNotify.value = false;
+    notifyMsg.value = '';
   }, duration);
 };
 
