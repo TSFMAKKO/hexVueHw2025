@@ -86,11 +86,21 @@ const carts = ref([
   }
 ]);
 
-const showNotification = ref(false);
-const notification = ref('');
+const isNotificationVisible = ref(false);
+const notificationMessage = ref('');
 
-provide('showNotification', showNotification);
-provide('notification', notification);
+provide('isNotificationVisible', isNotificationVisible);
+provide('notificationMessage', notificationMessage);
+
+// 封裝通知顯示為共用函數
+const triggerNotification = (message, duration = 5000) => {
+  notificationMessage.value = message;
+  isNotificationVisible.value = true;
+  setTimeout(() => {
+    isNotificationVisible.value = false;
+    notificationMessage.value = '';
+  }, duration);
+};
 
 const addCart = (product) => {
   // 檢查商品是否已在購物車中
@@ -108,17 +118,10 @@ const addCart = (product) => {
     });
   }
 
-
   console.log(carts.value);
 
-  // 顯示通知訊息
-  notification.value = `${product.title} 已加入購物車`;
-
-  showNotification.value = true;
-  setTimeout(() => {
-    showNotification.value = false;
-    notification.value = '';
-  }, 2000); // 通知顯示2秒後自動隱藏
+  // 顯示通知訊息（共用函數）
+  triggerNotification(`${product.title} 已加入購物車`);
 };
 
 const removeCart = (cart) => {
@@ -127,6 +130,8 @@ const removeCart = (cart) => {
   if (index !== -1) {
     carts.value.splice(index, 1);
   }
+
+  triggerNotification(`${cart.title} 已從購物車移除`);
 };
 
 </script>
